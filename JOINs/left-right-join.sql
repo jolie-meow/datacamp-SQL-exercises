@@ -22,7 +22,16 @@ WHERE year = 2010
 GROUP BY region
 ORDER BY avg_gdp DESC;
 
---example 4: RIGHT JOINS
+--example 4: In terms of life expectancy for 2010, determine the names of the lowest five countries and their regions.
+SELECT name AS country,region, life_expectancy AS life_exp
+FROM countries AS c
+LEFT JOIN populations AS p
+ON c.code = p.country_code
+WHERE year = 2010
+ORDER BY life_expectancy
+LIMIT 5;
+
+--example 5: RIGHT JOINS
 SELECT cities.name AS city, urbanarea_pop, countries.name AS country,
        indep_year, languages.name AS language, percent
 FROM languages

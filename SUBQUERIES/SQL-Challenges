@@ -1,0 +1,44 @@
+--CHALLENGE 1: Total Investment and Imports in Central America countries with an official languague
+SELECT DISTINCT c.name, total_investment, imports
+FROM countries AS c
+  LEFT JOIN economies AS e  
+    ON (c.code = e.code     
+    AND c.code IN
+      (SELECT l.code 
+      FROM languages AS l
+      WHERE official = 'true'))
+
+WHERE region = 'Central America' AND year = 2015
+ORDER BY c.name;
+
+
+
+
+
+--CHALLENGE 2: Calculate the average fertility rate for each region in 2015
+SELECT region, continent, AVG(fertility_rate) AS avg_fert_rate
+FROM countries AS c 
+    INNER JOIN populations AS p 
+    ON c.code = p.country_code 
+WHERE year = 2015
+GROUP BY region, continent
+ORDER BY avg_fert_rate;
+
+
+
+
+
+
+--CHALLENGE 3: Determine the top 10 *capital* cities in Europe and the Americas
+--in terms of a calculated percentage using city_proper_pop and metroarea_pop in cities.
+SELECT name, country_code, city_proper_pop, metroarea_pop,
+        city_proper_pop / metroarea_pop * 100 AS city_perc
+FROM cities
+    WHERE name IN
+        (SELECT capital
+        FROM countries 
+        WHERE continent = 'Europe' OR continent LIKE '%America'
+        )
+    AND metroarea_pop IS NOT NULL
+ORDER BY city_perc DESC
+LIMIT 10;
